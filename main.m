@@ -1,39 +1,65 @@
 
 #import <Foundation/Foundation.h>
 
-@interface Composited : NSObject
+@class MyClass;
+@interface Composited : NSObject {
+	__weak MyClass *myClass_;
+}
+- (id)initWithMyClass:(MyClass *)myClass;
+- (void)func;
+@end
+
+@interface MyClass : NSObject {
+	Composited *composited_;
+}
+- (void)func;
 @end
 
 @implementation Composited
-- (void)dealloc { NSLog(@"Composited's dealloc."); }
-@end
 
-@interface ObjC : NSObject {
-	Composited *composited_;
+- (id)initWithMyClass:(MyClass *)myClass
+{
+	self = [super init];
+	if (self) {
+		myClass_ = myClass;
+	}
+	return self;
 }
+
+- (void)dealloc { NSLog(@"Composited's dealloc."); }
+
+- (void)func
+{
+	NSLog(@"Composited's func");
+	[myClass_ func];
+}
+
 @end
 
-@implementation ObjC
+@implementation MyClass
 
 - (id)init
 {
     self = [super init];
     if (self) {
-        composited_ = [[Composited alloc] init];
+        composited_ = [[Composited alloc] initWithMyClass:self];
     }
     return self;
 }
 
 - (void)dealloc
 {
-	NSLog(@"ObjC's dealloc.");
+	[composited_ func];
+	NSLog(@"MyClass's dealloc.");
 }
+
+- (void)func { NSLog(@"MyClass's func"); }
 
 @end
 
 static void test()
 {
-	ObjC *objc = [[ObjC alloc] init];
+	MyClass *mc = [[MyClass alloc] init];
 }
 
 int main()
