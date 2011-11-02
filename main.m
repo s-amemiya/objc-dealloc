@@ -19,6 +19,7 @@
 
 - (id)initWithMyClass:(MyClass *)myClass
 {
+	NSLog(@"%s", __func__);
 	self = [super init];
 	if (self) {
 		myClass_ = myClass;
@@ -26,11 +27,11 @@
 	return self;
 }
 
-- (void)dealloc { NSLog(@"Composited's dealloc."); }
+- (void)dealloc { NSLog(@"%s", __func__); }
 
 - (void)func
 {
-	NSLog(@"Composited's func");
+	NSLog(@"%s", __func__);
 	[myClass_ func];
 }
 
@@ -40,6 +41,7 @@
 
 - (id)init
 {
+	NSLog(@"%s", __func__);
     self = [super init];
     if (self) {
         composited_ = [[Composited alloc] initWithMyClass:self];
@@ -49,11 +51,11 @@
 
 - (void)dealloc
 {
+	NSLog(@"%s", __func__);
 	[composited_ func];
-	NSLog(@"MyClass's dealloc.");
 }
 
-- (void)func { NSLog(@"MyClass's func"); }
+- (void)func { NSLog(@"%s", __func__); }
 
 @end
 
